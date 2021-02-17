@@ -172,16 +172,16 @@ methods
             idx(end+1) = true;
         end
         x(idx) = lsqnonneg( AA(:,idx), yy, CONFIG.OPTIMIZATION.LS_param );
-
+        xx = x ./ ( sum(x) + eps );
+	
         % compute MAPS
         if ( obj.isExvivo )
-            xx =  x(1:end-2);
-            fISO = x(end-1);
+            xx =  xx(1:end-2);
+            fISO = xx(end-1);
         else
-            xx =  x(1:end-1);
-            fISO = x(end);
+            xx =  xx(1:end-1);
+            fISO = xx(end);
         end
-        xx = xx ./ ( sum(xx) + eps );
         f1 = KERNELS.A_icvf * xx;
         f2 = (1-KERNELS.A_icvf) * xx;
         MAPs(1) = f1 / (f1+f2+eps);
